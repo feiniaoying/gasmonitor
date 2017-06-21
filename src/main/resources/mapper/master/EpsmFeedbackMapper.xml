@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkzj.dao.master.EpsmFeedbackDao">
+    <resultMap id="result_EpsmFeedback_Map" type="com.zkzj.entity.EpsmFeedback">
+        <id column="EpsmFeedback0" property="feedbackid" />
+        <result column="EpsmFeedback1" property="content" />
+        <result column="EpsmFeedback2" property="actorid" />
+        <result column="EpsmFeedback3" property="address" />
+        <result column="EpsmFeedback4" property="addresslatitude" />
+        <result column="EpsmFeedback5" property="addresslongitude" />
+        <result column="EpsmFeedback6" property="senselevle" />
+        <result column="EpsmFeedback7" property="status" />
+        <result column="EpsmFeedback8" property="remark" />
+        <result column="EpsmFeedback9" property="deleteflag" />
+        <result column="EpsmFeedback10" property="createtime" />
+        <result column="EpsmFeedback11" property="creatorid" />
+        <result column="EpsmFeedback12" property="updatetime" />
+        <result column="EpsmFeedback13" property="updaterid" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="t_epsm_feedback_Column">
+        t_epsm_feedback.feedbackid as EpsmFeedback0
+        ,t_epsm_feedback.content as EpsmFeedback1
+        ,t_epsm_feedback.actorid as EpsmFeedback2
+        ,t_epsm_feedback.address as EpsmFeedback3
+        ,t_epsm_feedback.addresslatitude as EpsmFeedback4
+        ,t_epsm_feedback.addresslongitude as EpsmFeedback5
+        ,t_epsm_feedback.senselevle as EpsmFeedback6
+        ,t_epsm_feedback.status as EpsmFeedback7
+        ,t_epsm_feedback.remark as EpsmFeedback8
+        ,t_epsm_feedback.deleteflag as EpsmFeedback9
+        ,t_epsm_feedback.createtime as EpsmFeedback10
+        ,t_epsm_feedback.creatorid as EpsmFeedback11
+        ,t_epsm_feedback.updatetime as EpsmFeedback12
+        ,t_epsm_feedback.updaterid as EpsmFeedback13
+    </sql>
+
+    <select id="getEpsmFeedbackRowCount" parameterType="com.zkzj.common.Assist" resultType="java.lang.Long">
+        select count(feedbackid) from t_epsm_feedback
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectEpsmFeedback" parameterType="com.zkzj.common.Assist"  resultMap="result_EpsmFeedback_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_epsm_feedback_Column" /> 
+            </otherwise>
+        </choose>
+        from t_epsm_feedback
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectEpsmFeedbackById" parameterType="java.lang.String" resultMap="result_EpsmFeedback_Map">
+        select 
+            <include refid="t_epsm_feedback_Column" /> 
+        from t_epsm_feedback
+        where t_epsm_feedback.feedbackid = #{id}
+    </select> 
+
+
+    <insert id="insertEpsmFeedback" parameterType="com.zkzj.entity.EpsmFeedback">
+        insert into t_epsm_feedback(feedbackid,content,actorid,address,addresslatitude,addresslongitude,senselevle,status,remark,deleteflag,createtime,creatorid,updatetime,updaterid) 
+        values(#{feedbackid},#{content},#{actorid},#{address},#{addresslatitude},#{addresslongitude},#{senselevle},#{status},#{remark},#{deleteflag},#{createtime},#{creatorid},#{updatetime},#{updaterid})
+    </insert>
+
+    <insert id="insertNonEmptyEpsmFeedback" parameterType="com.zkzj.entity.EpsmFeedback">
+        insert into t_epsm_feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="feedbackid != null">feedbackid,</if>
+            <if test="content != null">content,</if>
+            <if test="actorid != null">actorid,</if>
+            <if test="address != null">address,</if>
+            <if test="addresslatitude != null">addresslatitude,</if>
+            <if test="addresslongitude != null">addresslongitude,</if>
+            <if test="senselevle != null">senselevle,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleteflag != null">deleteflag,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="creatorid != null">creatorid,</if>
+            <if test="updatetime != null">updatetime,</if>
+            <if test="updaterid != null">updaterid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="feedbackid != null"> #{feedbackid},</if>
+            <if test="content != null"> #{content},</if>
+            <if test="actorid != null"> #{actorid},</if>
+            <if test="address != null"> #{address},</if>
+            <if test="addresslatitude != null"> #{addresslatitude},</if>
+            <if test="addresslongitude != null"> #{addresslongitude},</if>
+            <if test="senselevle != null"> #{senselevle},</if>
+            <if test="status != null"> #{status},</if>
+            <if test="remark != null"> #{remark},</if>
+            <if test="deleteflag != null"> #{deleteflag},</if>
+            <if test="createtime != null"> #{createtime},</if>
+            <if test="creatorid != null"> #{creatorid},</if>
+            <if test="updatetime != null"> #{updatetime},</if>
+            <if test="updaterid != null"> #{updaterid},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteEpsmFeedbackById" parameterType="java.lang.String">
+        delete from t_epsm_feedback
+        where feedbackid = #{id}
+    </delete>
+
+    <delete id="deleteEpsmFeedback" parameterType="com.zkzj.common.Assist">
+        delete from t_epsm_feedback
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateEpsmFeedbackById" parameterType="com.zkzj.entity.EpsmFeedback">
+        update t_epsm_feedback set
+            content=#{content}
+            ,actorid=#{actorid}
+            ,address=#{address}
+            ,addresslatitude=#{addresslatitude}
+            ,addresslongitude=#{addresslongitude}
+            ,senselevle=#{senselevle}
+            ,status=#{status}
+            ,remark=#{remark}
+            ,deleteflag=#{deleteflag}
+            ,createtime=#{createtime}
+            ,creatorid=#{creatorid}
+            ,updatetime=#{updatetime}
+            ,updaterid=#{updaterid}
+        where feedbackid=#{feedbackid}
+    </update>
+
+    <update id="updateNonEmptyEpsmFeedbackById" parameterType="com.zkzj.entity.EpsmFeedback">
+        update t_epsm_feedback
+        <set>
+            <if test="content != null">
+                content=#{content},
+            </if>
+            <if test="actorid != null">
+                actorid=#{actorid},
+            </if>
+            <if test="address != null">
+                address=#{address},
+            </if>
+            <if test="addresslatitude != null">
+                addresslatitude=#{addresslatitude},
+            </if>
+            <if test="addresslongitude != null">
+                addresslongitude=#{addresslongitude},
+            </if>
+            <if test="senselevle != null">
+                senselevle=#{senselevle},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+            <if test="deleteflag != null">
+                deleteflag=#{deleteflag},
+            </if>
+            <if test="createtime != null">
+                createtime=#{createtime},
+            </if>
+            <if test="creatorid != null">
+                creatorid=#{creatorid},
+            </if>
+            <if test="updatetime != null">
+                updatetime=#{updatetime},
+            </if>
+            <if test="updaterid != null">
+                updaterid=#{updaterid},
+            </if>
+        </set>
+        where feedbackid=#{feedbackid}
+    </update>
+
+    <update id="updateEpsmFeedback" parameterType="map">
+        update t_epsm_feedback
+        <set>
+                feedbackid=#{enti.feedbackid},
+                content=#{enti.content},
+                actorid=#{enti.actorid},
+                address=#{enti.address},
+                addresslatitude=#{enti.addresslatitude},
+                addresslongitude=#{enti.addresslongitude},
+                senselevle=#{enti.senselevle},
+                status=#{enti.status},
+                remark=#{enti.remark},
+                deleteflag=#{enti.deleteflag},
+                createtime=#{enti.createtime},
+                creatorid=#{enti.creatorid},
+                updatetime=#{enti.updatetime},
+                updaterid=#{enti.updaterid},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyEpsmFeedback" parameterType="map">
+        update t_epsm_feedback
+        <set>
+            <if test="enti.feedbackid != null">
+                feedbackid=#{enti.feedbackid},
+            </if>
+            <if test="enti.content != null">
+                content=#{enti.content},
+            </if>
+            <if test="enti.actorid != null">
+                actorid=#{enti.actorid},
+            </if>
+            <if test="enti.address != null">
+                address=#{enti.address},
+            </if>
+            <if test="enti.addresslatitude != null">
+                addresslatitude=#{enti.addresslatitude},
+            </if>
+            <if test="enti.addresslongitude != null">
+                addresslongitude=#{enti.addresslongitude},
+            </if>
+            <if test="enti.senselevle != null">
+                senselevle=#{enti.senselevle},
+            </if>
+            <if test="enti.status != null">
+                status=#{enti.status},
+            </if>
+            <if test="enti.remark != null">
+                remark=#{enti.remark},
+            </if>
+            <if test="enti.deleteflag != null">
+                deleteflag=#{enti.deleteflag},
+            </if>
+            <if test="enti.createtime != null">
+                createtime=#{enti.createtime},
+            </if>
+            <if test="enti.creatorid != null">
+                creatorid=#{enti.creatorid},
+            </if>
+            <if test="enti.updatetime != null">
+                updatetime=#{enti.updatetime},
+            </if>
+            <if test="enti.updaterid != null">
+                updaterid=#{enti.updaterid},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

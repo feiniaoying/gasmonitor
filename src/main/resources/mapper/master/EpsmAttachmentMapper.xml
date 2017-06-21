@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkzj.dao.master.EpsmAttachmentDao">
+    <resultMap id="result_EpsmAttachment_Map" type="com.zkzj.entity.EpsmAttachment">
+        <id column="EpsmAttachment0" property="attachmentid" />
+        <result column="EpsmAttachment1" property="filename" />
+        <result column="EpsmAttachment2" property="serverpath" />
+        <result column="EpsmAttachment3" property="localpath" />
+        <result column="EpsmAttachment4" property="fileurl" />
+        <result column="EpsmAttachment5" property="filesize" />
+        <result column="EpsmAttachment6" property="filetype" />
+        <result column="EpsmAttachment7" property="attachmenttype" />
+        <result column="EpsmAttachment8" property="uploadtime" />
+        <result column="EpsmAttachment9" property="uploadsource" />
+        <result column="EpsmAttachment10" property="buissnessid" />
+        <result column="EpsmAttachment11" property="md5" />
+        <result column="EpsmAttachment12" property="remark" />
+        <result column="EpsmAttachment13" property="deleteflag" />
+        <result column="EpsmAttachment14" property="createtime" />
+        <result column="EpsmAttachment15" property="creatorid" />
+        <result column="EpsmAttachment16" property="updatetime" />
+        <result column="EpsmAttachment17" property="updaterid" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="t_epsm_attachment_Column">
+        t_epsm_attachment.attachmentid as EpsmAttachment0
+        ,t_epsm_attachment.filename as EpsmAttachment1
+        ,t_epsm_attachment.serverpath as EpsmAttachment2
+        ,t_epsm_attachment.localpath as EpsmAttachment3
+        ,t_epsm_attachment.fileurl as EpsmAttachment4
+        ,t_epsm_attachment.filesize as EpsmAttachment5
+        ,t_epsm_attachment.filetype as EpsmAttachment6
+        ,t_epsm_attachment.attachmenttype as EpsmAttachment7
+        ,t_epsm_attachment.uploadtime as EpsmAttachment8
+        ,t_epsm_attachment.uploadsource as EpsmAttachment9
+        ,t_epsm_attachment.buissnessid as EpsmAttachment10
+        ,t_epsm_attachment.md5 as EpsmAttachment11
+        ,t_epsm_attachment.remark as EpsmAttachment12
+        ,t_epsm_attachment.deleteflag as EpsmAttachment13
+        ,t_epsm_attachment.createtime as EpsmAttachment14
+        ,t_epsm_attachment.creatorid as EpsmAttachment15
+        ,t_epsm_attachment.updatetime as EpsmAttachment16
+        ,t_epsm_attachment.updaterid as EpsmAttachment17
+    </sql>
+
+    <select id="getEpsmAttachmentRowCount" parameterType="com.zkzj.common.Assist" resultType="java.lang.Long">
+        select count(attachmentid) from t_epsm_attachment
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectEpsmAttachment" parameterType="com.zkzj.common.Assist"  resultMap="result_EpsmAttachment_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_epsm_attachment_Column" /> 
+            </otherwise>
+        </choose>
+        from t_epsm_attachment
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectEpsmAttachmentById" parameterType="java.lang.String" resultMap="result_EpsmAttachment_Map">
+        select 
+            <include refid="t_epsm_attachment_Column" /> 
+        from t_epsm_attachment
+        where t_epsm_attachment.attachmentid = #{id}
+    </select> 
+
+
+    <insert id="insertEpsmAttachment" parameterType="com.zkzj.entity.EpsmAttachment">
+        insert into t_epsm_attachment(attachmentid,filename,serverpath,localpath,fileurl,filesize,filetype,attachmenttype,uploadtime,uploadsource,buissnessid,md5,remark,deleteflag,createtime,creatorid,updatetime,updaterid) 
+        values(#{attachmentid},#{filename},#{serverpath},#{localpath},#{fileurl},#{filesize},#{filetype},#{attachmenttype},#{uploadtime},#{uploadsource},#{buissnessid},#{md5},#{remark},#{deleteflag},#{createtime},#{creatorid},#{updatetime},#{updaterid})
+    </insert>
+
+    <insert id="insertNonEmptyEpsmAttachment" parameterType="com.zkzj.entity.EpsmAttachment">
+        insert into t_epsm_attachment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="attachmentid != null">attachmentid,</if>
+            <if test="filename != null">filename,</if>
+            <if test="serverpath != null">serverpath,</if>
+            <if test="localpath != null">localpath,</if>
+            <if test="fileurl != null">fileurl,</if>
+            <if test="filesize != null">filesize,</if>
+            <if test="filetype != null">filetype,</if>
+            <if test="attachmenttype != null">attachmenttype,</if>
+            <if test="uploadtime != null">uploadtime,</if>
+            <if test="uploadsource != null">uploadsource,</if>
+            <if test="buissnessid != null">buissnessid,</if>
+            <if test="md5 != null">md5,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleteflag != null">deleteflag,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="creatorid != null">creatorid,</if>
+            <if test="updatetime != null">updatetime,</if>
+            <if test="updaterid != null">updaterid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="attachmentid != null"> #{attachmentid},</if>
+            <if test="filename != null"> #{filename},</if>
+            <if test="serverpath != null"> #{serverpath},</if>
+            <if test="localpath != null"> #{localpath},</if>
+            <if test="fileurl != null"> #{fileurl},</if>
+            <if test="filesize != null"> #{filesize},</if>
+            <if test="filetype != null"> #{filetype},</if>
+            <if test="attachmenttype != null"> #{attachmenttype},</if>
+            <if test="uploadtime != null"> #{uploadtime},</if>
+            <if test="uploadsource != null"> #{uploadsource},</if>
+            <if test="buissnessid != null"> #{buissnessid},</if>
+            <if test="md5 != null"> #{md5},</if>
+            <if test="remark != null"> #{remark},</if>
+            <if test="deleteflag != null"> #{deleteflag},</if>
+            <if test="createtime != null"> #{createtime},</if>
+            <if test="creatorid != null"> #{creatorid},</if>
+            <if test="updatetime != null"> #{updatetime},</if>
+            <if test="updaterid != null"> #{updaterid},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteEpsmAttachmentById" parameterType="java.lang.String">
+        delete from t_epsm_attachment
+        where attachmentid = #{id}
+    </delete>
+
+    <delete id="deleteEpsmAttachment" parameterType="com.zkzj.common.Assist">
+        delete from t_epsm_attachment
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateEpsmAttachmentById" parameterType="com.zkzj.entity.EpsmAttachment">
+        update t_epsm_attachment set
+            filename=#{filename}
+            ,serverpath=#{serverpath}
+            ,localpath=#{localpath}
+            ,fileurl=#{fileurl}
+            ,filesize=#{filesize}
+            ,filetype=#{filetype}
+            ,attachmenttype=#{attachmenttype}
+            ,uploadtime=#{uploadtime}
+            ,uploadsource=#{uploadsource}
+            ,buissnessid=#{buissnessid}
+            ,md5=#{md5}
+            ,remark=#{remark}
+            ,deleteflag=#{deleteflag}
+            ,createtime=#{createtime}
+            ,creatorid=#{creatorid}
+            ,updatetime=#{updatetime}
+            ,updaterid=#{updaterid}
+        where attachmentid=#{attachmentid}
+    </update>
+
+    <update id="updateNonEmptyEpsmAttachmentById" parameterType="com.zkzj.entity.EpsmAttachment">
+        update t_epsm_attachment
+        <set>
+            <if test="filename != null">
+                filename=#{filename},
+            </if>
+            <if test="serverpath != null">
+                serverpath=#{serverpath},
+            </if>
+            <if test="localpath != null">
+                localpath=#{localpath},
+            </if>
+            <if test="fileurl != null">
+                fileurl=#{fileurl},
+            </if>
+            <if test="filesize != null">
+                filesize=#{filesize},
+            </if>
+            <if test="filetype != null">
+                filetype=#{filetype},
+            </if>
+            <if test="attachmenttype != null">
+                attachmenttype=#{attachmenttype},
+            </if>
+            <if test="uploadtime != null">
+                uploadtime=#{uploadtime},
+            </if>
+            <if test="uploadsource != null">
+                uploadsource=#{uploadsource},
+            </if>
+            <if test="buissnessid != null">
+                buissnessid=#{buissnessid},
+            </if>
+            <if test="md5 != null">
+                md5=#{md5},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+            <if test="deleteflag != null">
+                deleteflag=#{deleteflag},
+            </if>
+            <if test="createtime != null">
+                createtime=#{createtime},
+            </if>
+            <if test="creatorid != null">
+                creatorid=#{creatorid},
+            </if>
+            <if test="updatetime != null">
+                updatetime=#{updatetime},
+            </if>
+            <if test="updaterid != null">
+                updaterid=#{updaterid},
+            </if>
+        </set>
+        where attachmentid=#{attachmentid}
+    </update>
+
+    <update id="updateEpsmAttachment" parameterType="map">
+        update t_epsm_attachment
+        <set>
+                attachmentid=#{enti.attachmentid},
+                filename=#{enti.filename},
+                serverpath=#{enti.serverpath},
+                localpath=#{enti.localpath},
+                fileurl=#{enti.fileurl},
+                filesize=#{enti.filesize},
+                filetype=#{enti.filetype},
+                attachmenttype=#{enti.attachmenttype},
+                uploadtime=#{enti.uploadtime},
+                uploadsource=#{enti.uploadsource},
+                buissnessid=#{enti.buissnessid},
+                md5=#{enti.md5},
+                remark=#{enti.remark},
+                deleteflag=#{enti.deleteflag},
+                createtime=#{enti.createtime},
+                creatorid=#{enti.creatorid},
+                updatetime=#{enti.updatetime},
+                updaterid=#{enti.updaterid},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyEpsmAttachment" parameterType="map">
+        update t_epsm_attachment
+        <set>
+            <if test="enti.attachmentid != null">
+                attachmentid=#{enti.attachmentid},
+            </if>
+            <if test="enti.filename != null">
+                filename=#{enti.filename},
+            </if>
+            <if test="enti.serverpath != null">
+                serverpath=#{enti.serverpath},
+            </if>
+            <if test="enti.localpath != null">
+                localpath=#{enti.localpath},
+            </if>
+            <if test="enti.fileurl != null">
+                fileurl=#{enti.fileurl},
+            </if>
+            <if test="enti.filesize != null">
+                filesize=#{enti.filesize},
+            </if>
+            <if test="enti.filetype != null">
+                filetype=#{enti.filetype},
+            </if>
+            <if test="enti.attachmenttype != null">
+                attachmenttype=#{enti.attachmenttype},
+            </if>
+            <if test="enti.uploadtime != null">
+                uploadtime=#{enti.uploadtime},
+            </if>
+            <if test="enti.uploadsource != null">
+                uploadsource=#{enti.uploadsource},
+            </if>
+            <if test="enti.buissnessid != null">
+                buissnessid=#{enti.buissnessid},
+            </if>
+            <if test="enti.md5 != null">
+                md5=#{enti.md5},
+            </if>
+            <if test="enti.remark != null">
+                remark=#{enti.remark},
+            </if>
+            <if test="enti.deleteflag != null">
+                deleteflag=#{enti.deleteflag},
+            </if>
+            <if test="enti.createtime != null">
+                createtime=#{enti.createtime},
+            </if>
+            <if test="enti.creatorid != null">
+                creatorid=#{enti.creatorid},
+            </if>
+            <if test="enti.updatetime != null">
+                updatetime=#{enti.updatetime},
+            </if>
+            <if test="enti.updaterid != null">
+                updaterid=#{enti.updaterid},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

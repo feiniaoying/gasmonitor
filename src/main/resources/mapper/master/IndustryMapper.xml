@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkzj.dao.master.IndustryDao">
+    <resultMap id="result_Industry_Map" type="com.zkzj.entity.Industry">
+        <id column="Industry0" property="industryid" />
+        <result column="Industry1" property="industrycode" />
+        <result column="Industry2" property="name" />
+        <result column="Industry3" property="remark" />
+        <result column="Industry4" property="deleteflag" />
+        <result column="Industry5" property="createtime" />
+        <result column="Industry6" property="creatorid" />
+        <result column="Industry7" property="updatetime" />
+        <result column="Industry8" property="updaterid" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="t_industry_Column">
+        t_industry.industryid as Industry0
+        ,t_industry.industrycode as Industry1
+        ,t_industry.name as Industry2
+        ,t_industry.remark as Industry3
+        ,t_industry.deleteflag as Industry4
+        ,t_industry.createtime as Industry5
+        ,t_industry.creatorid as Industry6
+        ,t_industry.updatetime as Industry7
+        ,t_industry.updaterid as Industry8
+    </sql>
+
+    <select id="getIndustryRowCount" parameterType="com.zkzj.common.Assist" resultType="java.lang.Long">
+        select count(industryid) from t_industry
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectIndustry" parameterType="com.zkzj.common.Assist"  resultMap="result_Industry_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_industry_Column" /> 
+            </otherwise>
+        </choose>
+        from t_industry
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectIndustryById" parameterType="java.lang.String" resultMap="result_Industry_Map">
+        select 
+            <include refid="t_industry_Column" /> 
+        from t_industry
+        where t_industry.industryid = #{id}
+    </select> 
+
+
+    <insert id="insertIndustry" parameterType="com.zkzj.entity.Industry">
+        insert into t_industry(industryid,industrycode,name,remark,deleteflag,createtime,creatorid,updatetime,updaterid) 
+        values(#{industryid},#{industrycode},#{name},#{remark},#{deleteflag},#{createtime},#{creatorid},#{updatetime},#{updaterid})
+    </insert>
+
+    <insert id="insertNonEmptyIndustry" parameterType="com.zkzj.entity.Industry">
+        insert into t_industry
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="industryid != null">industryid,</if>
+            <if test="industrycode != null">industrycode,</if>
+            <if test="name != null">name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleteflag != null">deleteflag,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="creatorid != null">creatorid,</if>
+            <if test="updatetime != null">updatetime,</if>
+            <if test="updaterid != null">updaterid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="industryid != null"> #{industryid},</if>
+            <if test="industrycode != null"> #{industrycode},</if>
+            <if test="name != null"> #{name},</if>
+            <if test="remark != null"> #{remark},</if>
+            <if test="deleteflag != null"> #{deleteflag},</if>
+            <if test="createtime != null"> #{createtime},</if>
+            <if test="creatorid != null"> #{creatorid},</if>
+            <if test="updatetime != null"> #{updatetime},</if>
+            <if test="updaterid != null"> #{updaterid},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteIndustryById" parameterType="java.lang.String">
+        delete from t_industry
+        where industryid = #{id}
+    </delete>
+
+    <delete id="deleteIndustry" parameterType="com.zkzj.common.Assist">
+        delete from t_industry
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateIndustryById" parameterType="com.zkzj.entity.Industry">
+        update t_industry set
+            industrycode=#{industrycode}
+            ,name=#{name}
+            ,remark=#{remark}
+            ,deleteflag=#{deleteflag}
+            ,createtime=#{createtime}
+            ,creatorid=#{creatorid}
+            ,updatetime=#{updatetime}
+            ,updaterid=#{updaterid}
+        where industryid=#{industryid}
+    </update>
+
+    <update id="updateNonEmptyIndustryById" parameterType="com.zkzj.entity.Industry">
+        update t_industry
+        <set>
+            <if test="industrycode != null">
+                industrycode=#{industrycode},
+            </if>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+            <if test="deleteflag != null">
+                deleteflag=#{deleteflag},
+            </if>
+            <if test="createtime != null">
+                createtime=#{createtime},
+            </if>
+            <if test="creatorid != null">
+                creatorid=#{creatorid},
+            </if>
+            <if test="updatetime != null">
+                updatetime=#{updatetime},
+            </if>
+            <if test="updaterid != null">
+                updaterid=#{updaterid},
+            </if>
+        </set>
+        where industryid=#{industryid}
+    </update>
+
+    <update id="updateIndustry" parameterType="map">
+        update t_industry
+        <set>
+                industryid=#{enti.industryid},
+                industrycode=#{enti.industrycode},
+                name=#{enti.name},
+                remark=#{enti.remark},
+                deleteflag=#{enti.deleteflag},
+                createtime=#{enti.createtime},
+                creatorid=#{enti.creatorid},
+                updatetime=#{enti.updatetime},
+                updaterid=#{enti.updaterid},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyIndustry" parameterType="map">
+        update t_industry
+        <set>
+            <if test="enti.industryid != null">
+                industryid=#{enti.industryid},
+            </if>
+            <if test="enti.industrycode != null">
+                industrycode=#{enti.industrycode},
+            </if>
+            <if test="enti.name != null">
+                name=#{enti.name},
+            </if>
+            <if test="enti.remark != null">
+                remark=#{enti.remark},
+            </if>
+            <if test="enti.deleteflag != null">
+                deleteflag=#{enti.deleteflag},
+            </if>
+            <if test="enti.createtime != null">
+                createtime=#{enti.createtime},
+            </if>
+            <if test="enti.creatorid != null">
+                creatorid=#{enti.creatorid},
+            </if>
+            <if test="enti.updatetime != null">
+                updatetime=#{enti.updatetime},
+            </if>
+            <if test="enti.updaterid != null">
+                updaterid=#{enti.updaterid},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

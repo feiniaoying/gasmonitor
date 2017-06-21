@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkzj.dao.master.EpsmEnoseDao">
+    <resultMap id="result_EpsmEnose_Map" type="com.zkzj.entity.EpsmEnose">
+        <id column="EpsmEnose0" property="enoseid" />
+        <result column="EpsmEnose1" property="enosecode" />
+        <result column="EpsmEnose2" property="enosename" />
+        <result column="EpsmEnose3" property="enoseserialno" />
+        <result column="EpsmEnose4" property="actorid" />
+        <result column="EpsmEnose5" property="companyid" />
+        <result column="EpsmEnose6" property="status" />
+        <result column="EpsmEnose7" property="remark" />
+        <result column="EpsmEnose8" property="deleteflag" />
+        <result column="EpsmEnose9" property="createtime" />
+        <result column="EpsmEnose10" property="creatorid" />
+        <result column="EpsmEnose11" property="updatetime" />
+        <result column="EpsmEnose12" property="updaterid" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="t_epsm_enose_Column">
+        t_epsm_enose.enoseid as EpsmEnose0
+        ,t_epsm_enose.enosecode as EpsmEnose1
+        ,t_epsm_enose.enosename as EpsmEnose2
+        ,t_epsm_enose.enoseserialno as EpsmEnose3
+        ,t_epsm_enose.actorid as EpsmEnose4
+        ,t_epsm_enose.companyid as EpsmEnose5
+        ,t_epsm_enose.status as EpsmEnose6
+        ,t_epsm_enose.remark as EpsmEnose7
+        ,t_epsm_enose.deleteflag as EpsmEnose8
+        ,t_epsm_enose.createtime as EpsmEnose9
+        ,t_epsm_enose.creatorid as EpsmEnose10
+        ,t_epsm_enose.updatetime as EpsmEnose11
+        ,t_epsm_enose.updaterid as EpsmEnose12
+    </sql>
+
+    <select id="getEpsmEnoseRowCount" parameterType="com.zkzj.common.Assist" resultType="java.lang.Long">
+        select count(enoseid) from t_epsm_enose
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectEpsmEnose" parameterType="com.zkzj.common.Assist"  resultMap="result_EpsmEnose_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_epsm_enose_Column" /> 
+            </otherwise>
+        </choose>
+        from t_epsm_enose
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectEpsmEnoseById" parameterType="java.lang.String" resultMap="result_EpsmEnose_Map">
+        select 
+            <include refid="t_epsm_enose_Column" /> 
+        from t_epsm_enose
+        where t_epsm_enose.enoseid = #{id}
+    </select> 
+
+
+    <insert id="insertEpsmEnose" parameterType="com.zkzj.entity.EpsmEnose">
+        insert into t_epsm_enose(enoseid,enosecode,enosename,enoseserialno,actorid,companyid,status,remark,deleteflag,createtime,creatorid,updatetime,updaterid) 
+        values(#{enoseid},#{enosecode},#{enosename},#{enoseserialno},#{actorid},#{companyid},#{status},#{remark},#{deleteflag},#{createtime},#{creatorid},#{updatetime},#{updaterid})
+    </insert>
+
+    <insert id="insertNonEmptyEpsmEnose" parameterType="com.zkzj.entity.EpsmEnose">
+        insert into t_epsm_enose
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="enoseid != null">enoseid,</if>
+            <if test="enosecode != null">enosecode,</if>
+            <if test="enosename != null">enosename,</if>
+            <if test="enoseserialno != null">enoseserialno,</if>
+            <if test="actorid != null">actorid,</if>
+            <if test="companyid != null">companyid,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleteflag != null">deleteflag,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="creatorid != null">creatorid,</if>
+            <if test="updatetime != null">updatetime,</if>
+            <if test="updaterid != null">updaterid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="enoseid != null"> #{enoseid},</if>
+            <if test="enosecode != null"> #{enosecode},</if>
+            <if test="enosename != null"> #{enosename},</if>
+            <if test="enoseserialno != null"> #{enoseserialno},</if>
+            <if test="actorid != null"> #{actorid},</if>
+            <if test="companyid != null"> #{companyid},</if>
+            <if test="status != null"> #{status},</if>
+            <if test="remark != null"> #{remark},</if>
+            <if test="deleteflag != null"> #{deleteflag},</if>
+            <if test="createtime != null"> #{createtime},</if>
+            <if test="creatorid != null"> #{creatorid},</if>
+            <if test="updatetime != null"> #{updatetime},</if>
+            <if test="updaterid != null"> #{updaterid},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteEpsmEnoseById" parameterType="java.lang.String">
+        delete from t_epsm_enose
+        where enoseid = #{id}
+    </delete>
+
+    <delete id="deleteEpsmEnose" parameterType="com.zkzj.common.Assist">
+        delete from t_epsm_enose
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateEpsmEnoseById" parameterType="com.zkzj.entity.EpsmEnose">
+        update t_epsm_enose set
+            enosecode=#{enosecode}
+            ,enosename=#{enosename}
+            ,enoseserialno=#{enoseserialno}
+            ,actorid=#{actorid}
+            ,companyid=#{companyid}
+            ,status=#{status}
+            ,remark=#{remark}
+            ,deleteflag=#{deleteflag}
+            ,createtime=#{createtime}
+            ,creatorid=#{creatorid}
+            ,updatetime=#{updatetime}
+            ,updaterid=#{updaterid}
+        where enoseid=#{enoseid}
+    </update>
+
+    <update id="updateNonEmptyEpsmEnoseById" parameterType="com.zkzj.entity.EpsmEnose">
+        update t_epsm_enose
+        <set>
+            <if test="enosecode != null">
+                enosecode=#{enosecode},
+            </if>
+            <if test="enosename != null">
+                enosename=#{enosename},
+            </if>
+            <if test="enoseserialno != null">
+                enoseserialno=#{enoseserialno},
+            </if>
+            <if test="actorid != null">
+                actorid=#{actorid},
+            </if>
+            <if test="companyid != null">
+                companyid=#{companyid},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+            <if test="deleteflag != null">
+                deleteflag=#{deleteflag},
+            </if>
+            <if test="createtime != null">
+                createtime=#{createtime},
+            </if>
+            <if test="creatorid != null">
+                creatorid=#{creatorid},
+            </if>
+            <if test="updatetime != null">
+                updatetime=#{updatetime},
+            </if>
+            <if test="updaterid != null">
+                updaterid=#{updaterid},
+            </if>
+        </set>
+        where enoseid=#{enoseid}
+    </update>
+
+    <update id="updateEpsmEnose" parameterType="map">
+        update t_epsm_enose
+        <set>
+                enoseid=#{enti.enoseid},
+                enosecode=#{enti.enosecode},
+                enosename=#{enti.enosename},
+                enoseserialno=#{enti.enoseserialno},
+                actorid=#{enti.actorid},
+                companyid=#{enti.companyid},
+                status=#{enti.status},
+                remark=#{enti.remark},
+                deleteflag=#{enti.deleteflag},
+                createtime=#{enti.createtime},
+                creatorid=#{enti.creatorid},
+                updatetime=#{enti.updatetime},
+                updaterid=#{enti.updaterid},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyEpsmEnose" parameterType="map">
+        update t_epsm_enose
+        <set>
+            <if test="enti.enoseid != null">
+                enoseid=#{enti.enoseid},
+            </if>
+            <if test="enti.enosecode != null">
+                enosecode=#{enti.enosecode},
+            </if>
+            <if test="enti.enosename != null">
+                enosename=#{enti.enosename},
+            </if>
+            <if test="enti.enoseserialno != null">
+                enoseserialno=#{enti.enoseserialno},
+            </if>
+            <if test="enti.actorid != null">
+                actorid=#{enti.actorid},
+            </if>
+            <if test="enti.companyid != null">
+                companyid=#{enti.companyid},
+            </if>
+            <if test="enti.status != null">
+                status=#{enti.status},
+            </if>
+            <if test="enti.remark != null">
+                remark=#{enti.remark},
+            </if>
+            <if test="enti.deleteflag != null">
+                deleteflag=#{enti.deleteflag},
+            </if>
+            <if test="enti.createtime != null">
+                createtime=#{enti.createtime},
+            </if>
+            <if test="enti.creatorid != null">
+                creatorid=#{enti.creatorid},
+            </if>
+            <if test="enti.updatetime != null">
+                updatetime=#{enti.updatetime},
+            </if>
+            <if test="enti.updaterid != null">
+                updaterid=#{enti.updaterid},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

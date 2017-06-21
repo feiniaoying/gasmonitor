@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkzj.dao.master.EpsmActorDao">
+    <resultMap id="result_EpsmActor_Map" type="com.zkzj.entity.EpsmActor">
+        <id column="EpsmActor0" property="actorid" />
+        <result column="EpsmActor1" property="actorcode" />
+        <result column="EpsmActor2" property="actorname" />
+        <result column="EpsmActor3" property="phone" />
+        <result column="EpsmActor4" property="status" />
+        <result column="EpsmActor5" property="username" />
+        <result column="EpsmActor6" property="password" />
+        <result column="EpsmActor7" property="actortype" />
+        <result column="EpsmActor8" property="actorrole" />
+        <result column="EpsmActor9" property="remark" />
+        <result column="EpsmActor10" property="deleteflag" />
+        <result column="EpsmActor11" property="createtime" />
+        <result column="EpsmActor12" property="creatorid" />
+        <result column="EpsmActor13" property="updatetime" />
+        <result column="EpsmActor14" property="updaterid" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="t_epsm_actor_Column">
+        t_epsm_actor.actorid as EpsmActor0
+        ,t_epsm_actor.actorcode as EpsmActor1
+        ,t_epsm_actor.actorname as EpsmActor2
+        ,t_epsm_actor.phone as EpsmActor3
+        ,t_epsm_actor.status as EpsmActor4
+        ,t_epsm_actor.username as EpsmActor5
+        ,t_epsm_actor.password as EpsmActor6
+        ,t_epsm_actor.actortype as EpsmActor7
+        ,t_epsm_actor.actorrole as EpsmActor8
+        ,t_epsm_actor.remark as EpsmActor9
+        ,t_epsm_actor.deleteflag as EpsmActor10
+        ,t_epsm_actor.createtime as EpsmActor11
+        ,t_epsm_actor.creatorid as EpsmActor12
+        ,t_epsm_actor.updatetime as EpsmActor13
+        ,t_epsm_actor.updaterid as EpsmActor14
+    </sql>
+
+    <select id="getEpsmActorRowCount" parameterType="com.zkzj.common.Assist" resultType="java.lang.Long">
+        select count(actorid) from t_epsm_actor
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectEpsmActor" parameterType="com.zkzj.common.Assist"  resultMap="result_EpsmActor_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_epsm_actor_Column" /> 
+            </otherwise>
+        </choose>
+        from t_epsm_actor
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectEpsmActorById" parameterType="java.lang.String" resultMap="result_EpsmActor_Map">
+        select 
+            <include refid="t_epsm_actor_Column" /> 
+        from t_epsm_actor
+        where t_epsm_actor.actorid = #{id}
+    </select> 
+
+
+    <insert id="insertEpsmActor" parameterType="com.zkzj.entity.EpsmActor">
+        insert into t_epsm_actor(actorid,actorcode,actorname,phone,status,username,password,actortype,actorrole,remark,deleteflag,createtime,creatorid,updatetime,updaterid) 
+        values(#{actorid},#{actorcode},#{actorname},#{phone},#{status},#{username},#{password},#{actortype},#{actorrole},#{remark},#{deleteflag},#{createtime},#{creatorid},#{updatetime},#{updaterid})
+    </insert>
+
+    <insert id="insertNonEmptyEpsmActor" parameterType="com.zkzj.entity.EpsmActor">
+        insert into t_epsm_actor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="actorid != null">actorid,</if>
+            <if test="actorcode != null">actorcode,</if>
+            <if test="actorname != null">actorname,</if>
+            <if test="phone != null">phone,</if>
+            <if test="status != null">status,</if>
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="actortype != null">actortype,</if>
+            <if test="actorrole != null">actorrole,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleteflag != null">deleteflag,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="creatorid != null">creatorid,</if>
+            <if test="updatetime != null">updatetime,</if>
+            <if test="updaterid != null">updaterid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="actorid != null"> #{actorid},</if>
+            <if test="actorcode != null"> #{actorcode},</if>
+            <if test="actorname != null"> #{actorname},</if>
+            <if test="phone != null"> #{phone},</if>
+            <if test="status != null"> #{status},</if>
+            <if test="username != null"> #{username},</if>
+            <if test="password != null"> #{password},</if>
+            <if test="actortype != null"> #{actortype},</if>
+            <if test="actorrole != null"> #{actorrole},</if>
+            <if test="remark != null"> #{remark},</if>
+            <if test="deleteflag != null"> #{deleteflag},</if>
+            <if test="createtime != null"> #{createtime},</if>
+            <if test="creatorid != null"> #{creatorid},</if>
+            <if test="updatetime != null"> #{updatetime},</if>
+            <if test="updaterid != null"> #{updaterid},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteEpsmActorById" parameterType="java.lang.String">
+        delete from t_epsm_actor
+        where actorid = #{id}
+    </delete>
+
+    <delete id="deleteEpsmActor" parameterType="com.zkzj.common.Assist">
+        delete from t_epsm_actor
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateEpsmActorById" parameterType="com.zkzj.entity.EpsmActor">
+        update t_epsm_actor set
+            actorcode=#{actorcode}
+            ,actorname=#{actorname}
+            ,phone=#{phone}
+            ,status=#{status}
+            ,username=#{username}
+            ,password=#{password}
+            ,actortype=#{actortype}
+            ,actorrole=#{actorrole}
+            ,remark=#{remark}
+            ,deleteflag=#{deleteflag}
+            ,createtime=#{createtime}
+            ,creatorid=#{creatorid}
+            ,updatetime=#{updatetime}
+            ,updaterid=#{updaterid}
+        where actorid=#{actorid}
+    </update>
+
+    <update id="updateNonEmptyEpsmActorById" parameterType="com.zkzj.entity.EpsmActor">
+        update t_epsm_actor
+        <set>
+            <if test="actorcode != null">
+                actorcode=#{actorcode},
+            </if>
+            <if test="actorname != null">
+                actorname=#{actorname},
+            </if>
+            <if test="phone != null">
+                phone=#{phone},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="password != null">
+                password=#{password},
+            </if>
+            <if test="actortype != null">
+                actortype=#{actortype},
+            </if>
+            <if test="actorrole != null">
+                actorrole=#{actorrole},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+            <if test="deleteflag != null">
+                deleteflag=#{deleteflag},
+            </if>
+            <if test="createtime != null">
+                createtime=#{createtime},
+            </if>
+            <if test="creatorid != null">
+                creatorid=#{creatorid},
+            </if>
+            <if test="updatetime != null">
+                updatetime=#{updatetime},
+            </if>
+            <if test="updaterid != null">
+                updaterid=#{updaterid},
+            </if>
+        </set>
+        where actorid=#{actorid}
+    </update>
+
+    <update id="updateEpsmActor" parameterType="map">
+        update t_epsm_actor
+        <set>
+                actorid=#{enti.actorid},
+                actorcode=#{enti.actorcode},
+                actorname=#{enti.actorname},
+                phone=#{enti.phone},
+                status=#{enti.status},
+                username=#{enti.username},
+                password=#{enti.password},
+                actortype=#{enti.actortype},
+                actorrole=#{enti.actorrole},
+                remark=#{enti.remark},
+                deleteflag=#{enti.deleteflag},
+                createtime=#{enti.createtime},
+                creatorid=#{enti.creatorid},
+                updatetime=#{enti.updatetime},
+                updaterid=#{enti.updaterid},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyEpsmActor" parameterType="map">
+        update t_epsm_actor
+        <set>
+            <if test="enti.actorid != null">
+                actorid=#{enti.actorid},
+            </if>
+            <if test="enti.actorcode != null">
+                actorcode=#{enti.actorcode},
+            </if>
+            <if test="enti.actorname != null">
+                actorname=#{enti.actorname},
+            </if>
+            <if test="enti.phone != null">
+                phone=#{enti.phone},
+            </if>
+            <if test="enti.status != null">
+                status=#{enti.status},
+            </if>
+            <if test="enti.username != null">
+                username=#{enti.username},
+            </if>
+            <if test="enti.password != null">
+                password=#{enti.password},
+            </if>
+            <if test="enti.actortype != null">
+                actortype=#{enti.actortype},
+            </if>
+            <if test="enti.actorrole != null">
+                actorrole=#{enti.actorrole},
+            </if>
+            <if test="enti.remark != null">
+                remark=#{enti.remark},
+            </if>
+            <if test="enti.deleteflag != null">
+                deleteflag=#{enti.deleteflag},
+            </if>
+            <if test="enti.createtime != null">
+                createtime=#{enti.createtime},
+            </if>
+            <if test="enti.creatorid != null">
+                creatorid=#{enti.creatorid},
+            </if>
+            <if test="enti.updatetime != null">
+                updatetime=#{enti.updatetime},
+            </if>
+            <if test="enti.updaterid != null">
+                updaterid=#{enti.updaterid},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

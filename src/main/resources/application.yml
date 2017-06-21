@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: dev
+
+#logback-xxx.xml 名字不可以是 logback.xml
+logging:
+  config: classpath:logback-spring.xml
+
+
+# jpa
+#spring.jpa.database = MYSQL
+#spring.jpa.show-sql = true
+#spring.jpa.hibernate.ddl-auto = update
+#spring.jpa.hibernate.naming-strategy = org.hibernate.cfg.ImprovedNamingStrategy
+#spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
+
+## master 数据源配置
+master:
+  datasource:
+    url: jdbc:postgresql://119.23.254.55:5432/postgres?charSet=utf-8
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+
+## cluster 数据源配置
+cluster:
+  datasource:
+    url: jdbc:postgresql://119.23.254.55:5432/postgres?charSet=utf-8
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver

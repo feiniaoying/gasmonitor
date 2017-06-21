@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkzj.dao.master.EpsmCompanyDao">
+    <resultMap id="result_EpsmCompany_Map" type="com.zkzj.entity.EpsmCompany">
+        <id column="EpsmCompany0" property="companyid" />
+        <result column="EpsmCompany1" property="companyname" />
+        <result column="EpsmCompany2" property="address" />
+        <result column="EpsmCompany3" property="addresslatitude" />
+        <result column="EpsmCompany4" property="addresslongitude" />
+        <result column="EpsmCompany5" property="contact" />
+        <result column="EpsmCompany6" property="contactphone" />
+        <result column="EpsmCompany7" property="telephone" />
+        <result column="EpsmCompany8" property="industrycode" />
+        <result column="EpsmCompany9" property="industryname" />
+        <result column="EpsmCompany10" property="remark" />
+        <result column="EpsmCompany11" property="deleteflag" />
+        <result column="EpsmCompany12" property="createtime" />
+        <result column="EpsmCompany13" property="creatorid" />
+        <result column="EpsmCompany14" property="updatetime" />
+        <result column="EpsmCompany15" property="updaterid" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="t_epsm_company_Column">
+        t_epsm_company.companyid as EpsmCompany0
+        ,t_epsm_company.companyname as EpsmCompany1
+        ,t_epsm_company.address as EpsmCompany2
+        ,t_epsm_company.addresslatitude as EpsmCompany3
+        ,t_epsm_company.addresslongitude as EpsmCompany4
+        ,t_epsm_company.contact as EpsmCompany5
+        ,t_epsm_company.contactphone as EpsmCompany6
+        ,t_epsm_company.telephone as EpsmCompany7
+        ,t_epsm_company.industrycode as EpsmCompany8
+        ,t_epsm_company.industryname as EpsmCompany9
+        ,t_epsm_company.remark as EpsmCompany10
+        ,t_epsm_company.deleteflag as EpsmCompany11
+        ,t_epsm_company.createtime as EpsmCompany12
+        ,t_epsm_company.creatorid as EpsmCompany13
+        ,t_epsm_company.updatetime as EpsmCompany14
+        ,t_epsm_company.updaterid as EpsmCompany15
+    </sql>
+
+    <select id="getEpsmCompanyRowCount" parameterType="com.zkzj.common.Assist" resultType="java.lang.Long">
+        select count(companyid) from t_epsm_company
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectEpsmCompany" parameterType="com.zkzj.common.Assist"  resultMap="result_EpsmCompany_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_epsm_company_Column" /> 
+            </otherwise>
+        </choose>
+        from t_epsm_company
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectEpsmCompanyById" parameterType="java.lang.String" resultMap="result_EpsmCompany_Map">
+        select 
+            <include refid="t_epsm_company_Column" /> 
+        from t_epsm_company
+        where t_epsm_company.companyid = #{id}
+    </select> 
+
+
+    <insert id="insertEpsmCompany" parameterType="com.zkzj.entity.EpsmCompany">
+        insert into t_epsm_company(companyid,companyname,address,addresslatitude,addresslongitude,contact,contactphone,telephone,industrycode,industryname,remark,deleteflag,createtime,creatorid,updatetime,updaterid) 
+        values(#{companyid},#{companyname},#{address},#{addresslatitude},#{addresslongitude},#{contact},#{contactphone},#{telephone},#{industrycode},#{industryname},#{remark},#{deleteflag},#{createtime},#{creatorid},#{updatetime},#{updaterid})
+    </insert>
+
+    <insert id="insertNonEmptyEpsmCompany" parameterType="com.zkzj.entity.EpsmCompany">
+        insert into t_epsm_company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyid != null">companyid,</if>
+            <if test="companyname != null">companyname,</if>
+            <if test="address != null">address,</if>
+            <if test="addresslatitude != null">addresslatitude,</if>
+            <if test="addresslongitude != null">addresslongitude,</if>
+            <if test="contact != null">contact,</if>
+            <if test="contactphone != null">contactphone,</if>
+            <if test="telephone != null">telephone,</if>
+            <if test="industrycode != null">industrycode,</if>
+            <if test="industryname != null">industryname,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleteflag != null">deleteflag,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="creatorid != null">creatorid,</if>
+            <if test="updatetime != null">updatetime,</if>
+            <if test="updaterid != null">updaterid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyid != null"> #{companyid},</if>
+            <if test="companyname != null"> #{companyname},</if>
+            <if test="address != null"> #{address},</if>
+            <if test="addresslatitude != null"> #{addresslatitude},</if>
+            <if test="addresslongitude != null"> #{addresslongitude},</if>
+            <if test="contact != null"> #{contact},</if>
+            <if test="contactphone != null"> #{contactphone},</if>
+            <if test="telephone != null"> #{telephone},</if>
+            <if test="industrycode != null"> #{industrycode},</if>
+            <if test="industryname != null"> #{industryname},</if>
+            <if test="remark != null"> #{remark},</if>
+            <if test="deleteflag != null"> #{deleteflag},</if>
+            <if test="createtime != null"> #{createtime},</if>
+            <if test="creatorid != null"> #{creatorid},</if>
+            <if test="updatetime != null"> #{updatetime},</if>
+            <if test="updaterid != null"> #{updaterid},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteEpsmCompanyById" parameterType="java.lang.String">
+        delete from t_epsm_company
+        where companyid = #{id}
+    </delete>
+
+    <delete id="deleteEpsmCompany" parameterType="com.zkzj.common.Assist">
+        delete from t_epsm_company
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateEpsmCompanyById" parameterType="com.zkzj.entity.EpsmCompany">
+        update t_epsm_company set
+            companyname=#{companyname}
+            ,address=#{address}
+            ,addresslatitude=#{addresslatitude}
+            ,addresslongitude=#{addresslongitude}
+            ,contact=#{contact}
+            ,contactphone=#{contactphone}
+            ,telephone=#{telephone}
+            ,industrycode=#{industrycode}
+            ,industryname=#{industryname}
+            ,remark=#{remark}
+            ,deleteflag=#{deleteflag}
+            ,createtime=#{createtime}
+            ,creatorid=#{creatorid}
+            ,updatetime=#{updatetime}
+            ,updaterid=#{updaterid}
+        where companyid=#{companyid}
+    </update>
+
+    <update id="updateNonEmptyEpsmCompanyById" parameterType="com.zkzj.entity.EpsmCompany">
+        update t_epsm_company
+        <set>
+            <if test="companyname != null">
+                companyname=#{companyname},
+            </if>
+            <if test="address != null">
+                address=#{address},
+            </if>
+            <if test="addresslatitude != null">
+                addresslatitude=#{addresslatitude},
+            </if>
+            <if test="addresslongitude != null">
+                addresslongitude=#{addresslongitude},
+            </if>
+            <if test="contact != null">
+                contact=#{contact},
+            </if>
+            <if test="contactphone != null">
+                contactphone=#{contactphone},
+            </if>
+            <if test="telephone != null">
+                telephone=#{telephone},
+            </if>
+            <if test="industrycode != null">
+                industrycode=#{industrycode},
+            </if>
+            <if test="industryname != null">
+                industryname=#{industryname},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+            <if test="deleteflag != null">
+                deleteflag=#{deleteflag},
+            </if>
+            <if test="createtime != null">
+                createtime=#{createtime},
+            </if>
+            <if test="creatorid != null">
+                creatorid=#{creatorid},
+            </if>
+            <if test="updatetime != null">
+                updatetime=#{updatetime},
+            </if>
+            <if test="updaterid != null">
+                updaterid=#{updaterid},
+            </if>
+        </set>
+        where companyid=#{companyid}
+    </update>
+
+    <update id="updateEpsmCompany" parameterType="map">
+        update t_epsm_company
+        <set>
+                companyid=#{enti.companyid},
+                companyname=#{enti.companyname},
+                address=#{enti.address},
+                addresslatitude=#{enti.addresslatitude},
+                addresslongitude=#{enti.addresslongitude},
+                contact=#{enti.contact},
+                contactphone=#{enti.contactphone},
+                telephone=#{enti.telephone},
+                industrycode=#{enti.industrycode},
+                industryname=#{enti.industryname},
+                remark=#{enti.remark},
+                deleteflag=#{enti.deleteflag},
+                createtime=#{enti.createtime},
+                creatorid=#{enti.creatorid},
+                updatetime=#{enti.updatetime},
+                updaterid=#{enti.updaterid},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyEpsmCompany" parameterType="map">
+        update t_epsm_company
+        <set>
+            <if test="enti.companyid != null">
+                companyid=#{enti.companyid},
+            </if>
+            <if test="enti.companyname != null">
+                companyname=#{enti.companyname},
+            </if>
+            <if test="enti.address != null">
+                address=#{enti.address},
+            </if>
+            <if test="enti.addresslatitude != null">
+                addresslatitude=#{enti.addresslatitude},
+            </if>
+            <if test="enti.addresslongitude != null">
+                addresslongitude=#{enti.addresslongitude},
+            </if>
+            <if test="enti.contact != null">
+                contact=#{enti.contact},
+            </if>
+            <if test="enti.contactphone != null">
+                contactphone=#{enti.contactphone},
+            </if>
+            <if test="enti.telephone != null">
+                telephone=#{enti.telephone},
+            </if>
+            <if test="enti.industrycode != null">
+                industrycode=#{enti.industrycode},
+            </if>
+            <if test="enti.industryname != null">
+                industryname=#{enti.industryname},
+            </if>
+            <if test="enti.remark != null">
+                remark=#{enti.remark},
+            </if>
+            <if test="enti.deleteflag != null">
+                deleteflag=#{enti.deleteflag},
+            </if>
+            <if test="enti.createtime != null">
+                createtime=#{enti.createtime},
+            </if>
+            <if test="enti.creatorid != null">
+                creatorid=#{enti.creatorid},
+            </if>
+            <if test="enti.updatetime != null">
+                updatetime=#{enti.updatetime},
+            </if>
+            <if test="enti.updaterid != null">
+                updaterid=#{enti.updaterid},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

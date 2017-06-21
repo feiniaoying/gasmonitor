@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkzj.dao.master.EpsmEnosedataDao">
+    <resultMap id="result_EpsmEnosedata_Map" type="com.zkzj.entity.EpsmEnosedata">
+        <id column="EpsmEnosedata0" property="dataid" />
+        <result column="EpsmEnosedata1" property="enoseserialno" />
+        <result column="EpsmEnosedata2" property="dysodiatype" />
+        <result column="EpsmEnosedata3" property="dysodiavalue" />
+        <result column="EpsmEnosedata4" property="testtime" />
+        <result column="EpsmEnosedata5" property="remark" />
+        <result column="EpsmEnosedata6" property="deleteflag" />
+        <result column="EpsmEnosedata7" property="createtime" />
+        <result column="EpsmEnosedata8" property="creatorid" />
+        <result column="EpsmEnosedata9" property="updatetime" />
+        <result column="EpsmEnosedata10" property="updaterid" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="t_epsm_enosedata_Column">
+        t_epsm_enosedata.dataid as EpsmEnosedata0
+        ,t_epsm_enosedata.enoseserialno as EpsmEnosedata1
+        ,t_epsm_enosedata.dysodiatype as EpsmEnosedata2
+        ,t_epsm_enosedata.dysodiavalue as EpsmEnosedata3
+        ,t_epsm_enosedata.testtime as EpsmEnosedata4
+        ,t_epsm_enosedata.remark as EpsmEnosedata5
+        ,t_epsm_enosedata.deleteflag as EpsmEnosedata6
+        ,t_epsm_enosedata.createtime as EpsmEnosedata7
+        ,t_epsm_enosedata.creatorid as EpsmEnosedata8
+        ,t_epsm_enosedata.updatetime as EpsmEnosedata9
+        ,t_epsm_enosedata.updaterid as EpsmEnosedata10
+    </sql>
+
+    <select id="getEpsmEnosedataRowCount" parameterType="com.zkzj.common.Assist" resultType="java.lang.Long">
+        select count(dataid) from t_epsm_enosedata
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectEpsmEnosedata" parameterType="com.zkzj.common.Assist"  resultMap="result_EpsmEnosedata_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_epsm_enosedata_Column" /> 
+            </otherwise>
+        </choose>
+        from t_epsm_enosedata
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectEpsmEnosedataById" parameterType="java.lang.String" resultMap="result_EpsmEnosedata_Map">
+        select 
+            <include refid="t_epsm_enosedata_Column" /> 
+        from t_epsm_enosedata
+        where t_epsm_enosedata.dataid = #{id}
+    </select> 
+
+
+    <insert id="insertEpsmEnosedata" parameterType="com.zkzj.entity.EpsmEnosedata">
+        insert into t_epsm_enosedata(dataid,enoseserialno,dysodiatype,dysodiavalue,testtime,remark,deleteflag,createtime,creatorid,updatetime,updaterid) 
+        values(#{dataid},#{enoseserialno},#{dysodiatype},#{dysodiavalue},#{testtime},#{remark},#{deleteflag},#{createtime},#{creatorid},#{updatetime},#{updaterid})
+    </insert>
+
+    <insert id="insertNonEmptyEpsmEnosedata" parameterType="com.zkzj.entity.EpsmEnosedata">
+        insert into t_epsm_enosedata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dataid != null">dataid,</if>
+            <if test="enoseserialno != null">enoseserialno,</if>
+            <if test="dysodiatype != null">dysodiatype,</if>
+            <if test="dysodiavalue != null">dysodiavalue,</if>
+            <if test="testtime != null">testtime,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleteflag != null">deleteflag,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="creatorid != null">creatorid,</if>
+            <if test="updatetime != null">updatetime,</if>
+            <if test="updaterid != null">updaterid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dataid != null"> #{dataid},</if>
+            <if test="enoseserialno != null"> #{enoseserialno},</if>
+            <if test="dysodiatype != null"> #{dysodiatype},</if>
+            <if test="dysodiavalue != null"> #{dysodiavalue},</if>
+            <if test="testtime != null"> #{testtime},</if>
+            <if test="remark != null"> #{remark},</if>
+            <if test="deleteflag != null"> #{deleteflag},</if>
+            <if test="createtime != null"> #{createtime},</if>
+            <if test="creatorid != null"> #{creatorid},</if>
+            <if test="updatetime != null"> #{updatetime},</if>
+            <if test="updaterid != null"> #{updaterid},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteEpsmEnosedataById" parameterType="java.lang.String">
+        delete from t_epsm_enosedata
+        where dataid = #{id}
+    </delete>
+
+    <delete id="deleteEpsmEnosedata" parameterType="com.zkzj.common.Assist">
+        delete from t_epsm_enosedata
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateEpsmEnosedataById" parameterType="com.zkzj.entity.EpsmEnosedata">
+        update t_epsm_enosedata set
+            enoseserialno=#{enoseserialno}
+            ,dysodiatype=#{dysodiatype}
+            ,dysodiavalue=#{dysodiavalue}
+            ,testtime=#{testtime}
+            ,remark=#{remark}
+            ,deleteflag=#{deleteflag}
+            ,createtime=#{createtime}
+            ,creatorid=#{creatorid}
+            ,updatetime=#{updatetime}
+            ,updaterid=#{updaterid}
+        where dataid=#{dataid}
+    </update>
+
+    <update id="updateNonEmptyEpsmEnosedataById" parameterType="com.zkzj.entity.EpsmEnosedata">
+        update t_epsm_enosedata
+        <set>
+            <if test="enoseserialno != null">
+                enoseserialno=#{enoseserialno},
+            </if>
+            <if test="dysodiatype != null">
+                dysodiatype=#{dysodiatype},
+            </if>
+            <if test="dysodiavalue != null">
+                dysodiavalue=#{dysodiavalue},
+            </if>
+            <if test="testtime != null">
+                testtime=#{testtime},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+            <if test="deleteflag != null">
+                deleteflag=#{deleteflag},
+            </if>
+            <if test="createtime != null">
+                createtime=#{createtime},
+            </if>
+            <if test="creatorid != null">
+                creatorid=#{creatorid},
+            </if>
+            <if test="updatetime != null">
+                updatetime=#{updatetime},
+            </if>
+            <if test="updaterid != null">
+                updaterid=#{updaterid},
+            </if>
+        </set>
+        where dataid=#{dataid}
+    </update>
+
+    <update id="updateEpsmEnosedata" parameterType="map">
+        update t_epsm_enosedata
+        <set>
+                dataid=#{enti.dataid},
+                enoseserialno=#{enti.enoseserialno},
+                dysodiatype=#{enti.dysodiatype},
+                dysodiavalue=#{enti.dysodiavalue},
+                testtime=#{enti.testtime},
+                remark=#{enti.remark},
+                deleteflag=#{enti.deleteflag},
+                createtime=#{enti.createtime},
+                creatorid=#{enti.creatorid},
+                updatetime=#{enti.updatetime},
+                updaterid=#{enti.updaterid},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyEpsmEnosedata" parameterType="map">
+        update t_epsm_enosedata
+        <set>
+            <if test="enti.dataid != null">
+                dataid=#{enti.dataid},
+            </if>
+            <if test="enti.enoseserialno != null">
+                enoseserialno=#{enti.enoseserialno},
+            </if>
+            <if test="enti.dysodiatype != null">
+                dysodiatype=#{enti.dysodiatype},
+            </if>
+            <if test="enti.dysodiavalue != null">
+                dysodiavalue=#{enti.dysodiavalue},
+            </if>
+            <if test="enti.testtime != null">
+                testtime=#{enti.testtime},
+            </if>
+            <if test="enti.remark != null">
+                remark=#{enti.remark},
+            </if>
+            <if test="enti.deleteflag != null">
+                deleteflag=#{enti.deleteflag},
+            </if>
+            <if test="enti.createtime != null">
+                createtime=#{enti.createtime},
+            </if>
+            <if test="enti.creatorid != null">
+                creatorid=#{enti.creatorid},
+            </if>
+            <if test="enti.updatetime != null">
+                updatetime=#{enti.updatetime},
+            </if>
+            <if test="enti.updaterid != null">
+                updaterid=#{enti.updaterid},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

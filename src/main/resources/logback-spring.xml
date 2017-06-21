@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>logback</contextName>
+    <!--引用系统默认配置的logback配置参数-->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!--<include resource="org/springframework/boot/logging/logback/defaults.xml" />-->
+    <jmxConfigurator/>
+
+    <logger name="org.springframework.web" level="DEBUG"/>
+    <property name="log.path" value="F:\\test\logs\\logback.log" />
+
+
+    <!-- 控制台打印日志的相关配置 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 日志格式 -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <!-- 日志级别过滤器 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤的级别 -->
+            <level>WARN</level>
+            <!-- 匹配时的操作：接收（记录） -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 不匹配时的操作：拒绝（不记录） -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!--输出到文件-->
+    <!-- 文件保存日志的相关配置 -->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 保存日志文件的路径 -->
+        <file>${log.path}</file>
+        <!-- 日志格式 -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <!-- 日志级别过滤器 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤的级别 -->
+            <level>ERROR</level>
+            <!-- 匹配时的操作：接收（记录） -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 不匹配时的操作：拒绝（不记录） -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 最大保存时间：30天-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <!--具体控制台或者文件对日志级别的处理还要看所在appender配置的filter，如果没有配置filter，则使用root配置 -->
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+    <springProfile name="test,dev">
+        <logger name="com.zkzj" level="DEBUG" />
+    </springProfile>
+    <!-- 生产环境. -->
+    <springProfile name="prod">
+        <logger name="com.zkzj" level="INFO" />
+    </springProfile>
+</configuration>
