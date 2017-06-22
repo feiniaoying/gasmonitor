@@ -55,7 +55,7 @@ public class EpsmActorController extends BaseController {
      * @return
      */
     @ApiOperation(value="获取参与者管理详细信息", notes="根据url的id来获取参与者管理详细信息")
-    //@ApiImplicitParam(name = "id", value = "参与者管理者Id", required = true, dataType = "String")
+    @ApiImplicitParam(name = "id", value = "参与者管理者Id", required = true, dataType = "String",paramType = "query")
     @GetMapping(value = "/epsmActors/{id}")
     public Result selectEpsmActorById(@ApiParam(name = "id", required = true, value = "参与者管理者Id")@PathVariable("id") String id) {
         logger.info("selectEpsmActorById");
@@ -70,7 +70,7 @@ public class EpsmActorController extends BaseController {
      */
     @ApiOperation(value="更新参与者管理详细信息", notes="根据url的actorid来指定更新对象，并根据传过来的epsmActor信息来更新参与者管理详细信息")
     @ApiImplicitParams({
-            //@ApiImplicitParam(name = "id", value = "参与者管理ID", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "id", value = "参与者管理ID", required = true, dataType = "String",paramType = "query"),
             @ApiImplicitParam(name = "epsmActor", value = "参与者管理实体epsmActor", required = true, dataType = "EpsmActor")
     })
     @PutMapping(value = "/epsmActors/{id}")
@@ -85,10 +85,10 @@ public class EpsmActorController extends BaseController {
 
 
     @ApiOperation(value="删除参与者管理", notes="根据url的id来指定删除对象")
-    @ApiImplicitParam(name = "id", value = "参与者管理ID", required = true, dataType = "String")
+    @ApiImplicitParam(name = "id", value = "参与者管理ID", required = true, dataType = "String",paramType = "query")
     //删除@DeleteMapping(value = "/epsmActors/{id}")
-    @DeleteMapping(value = "/epsmActors")
-    public Result deleteEpsmActorById(@ApiParam(name = "id", required = true, value = "参与者管理者Id") @RequestParam("id") String id) {
+    @DeleteMapping(value = "/epsmActors/{id}")
+    public Result deleteEpsmActorById(@ApiParam(name = "id", required = true, value = "参与者管理者Id") @PathVariable("id") String id) {
         logger.info("deleteEpsmActorById");
         epsmActorService.deleteEpsmActorById(id);
         return ResponseUtil.success();
