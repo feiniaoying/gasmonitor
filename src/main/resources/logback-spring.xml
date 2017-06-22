@@ -7,7 +7,7 @@
     <jmxConfigurator/>
 
     <logger name="org.springframework.web" level="DEBUG"/>
-    <property name="log.path" value="F:\\test\logs\\logback.log" />
+    <property name="log.path" value="T:\\temp\\logs\\logback.log" />
 
 
     <!-- 控制台打印日志的相关配置 -->

@@ -1,4 +1,5 @@
 package com.zkzj.entity;
+
 public class EpsmActor {
     private String actorid;
     private String actorcode;

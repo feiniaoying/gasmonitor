@@ -4,10 +4,7 @@ package com.zkzj.controller;
 import com.zkzj.entity.User;
 import com.zkzj.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户控制层
@@ -30,5 +27,18 @@ public class UserRestController {
     public User findByName(@RequestParam(value = "userName", required = true) String userName) {
         return userService.findByName(userName);
     }
+
+    /**
+     * 更新
+     * @param id
+     * @param name
+     * @param age
+     * @return
+     */
+    @RequestMapping("/update/{id}")
+    public void update(@PathVariable(name = "id") Long id, @RequestParam(name = "name") String name, @RequestParam(name = "age") int age) {
+
+    }
+
 
 }
