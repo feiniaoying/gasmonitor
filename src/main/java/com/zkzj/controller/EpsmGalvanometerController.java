@@ -31,9 +31,9 @@ public class EpsmGalvanometerController extends BaseController {
     @GetMapping(value = "/epsmGalvanometers")
     public Result epsmGalvanometerList() {
         logger.info("epsmGalvanometerList");
-        Long total =  epsmGalvanometerService.getEpsmGalvanometerRowCount(new Assist());
-        List<EpsmGalvanometer> EpsmGalvanometerList = epsmGalvanometerService.selectEpsmGalvanometer(new Assist());
-        return ResponseUtil.success(EpsmGalvanometerList,total);
+        //Long total =  epsmGalvanometerService.getEpsmGalvanometerRowCount(new Assist());
+        List<EpsmGalvanometer> epsmGalvanometerList = epsmGalvanometerService.selectEpsmGalvanometer(new Assist());
+        return ResponseUtil.success(epsmGalvanometerList,(long)epsmGalvanometerList.size());
     }
 
     /**
@@ -59,8 +59,31 @@ public class EpsmGalvanometerController extends BaseController {
     @GetMapping(value = "/epsmGalvanometers/{id}")
     public Result selectEpsmGalvanometerById(@ApiParam(name = "id", required = true, value = "电流表Id")@PathVariable("id") String id) {
         logger.info("selectEpsmGalvanometerById");
-        EpsmGalvanometer EpsmGalvanometer = epsmGalvanometerService.selectEpsmGalvanometerById(id);
-        return ResponseUtil.success(EpsmGalvanometer);
+        EpsmGalvanometer epsmGalvanometer = epsmGalvanometerService.selectEpsmGalvanometerById(id);
+        return ResponseUtil.success(epsmGalvanometer);
+    }
+
+
+
+    /**
+     * 查询电流表(分页使用)
+     * @param start
+     * @param end
+     * @return
+     */
+    @ApiOperation(value="获取电流表(分页)", notes="根据url的start来获取从第start条开始，每次取end-start条")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "start", value = "第start条记录", required = true, dataType = "Integer ",paramType = "query"),
+            @ApiImplicitParam(name = "end", value = "第end条记录", required = true, dataType = "Integer",paramType = "query")
+    })
+    @GetMapping(value = "/epsmGalvanometers/from/{start}/to/{end}")
+    public Result selectEpsmGalvanometerPage(@ApiParam(name = "start", required = true, value = "第start条记录")@PathVariable("start") Integer start,@ApiParam(name = "end", required = true, value = "第end条记录")@PathVariable("end") Integer end) {
+        logger.info("selectEpsmGalvanometerPage");
+        Assist assist = new Assist();
+        assist.setStartRow(start);
+        assist.setRowSize(end-start);
+        List<EpsmGalvanometer> epsmGalvanometerList = epsmGalvanometerService.selectEpsmGalvanometer(assist);
+        return ResponseUtil.success(epsmGalvanometerList,(long)epsmGalvanometerList.size());
     }
 
     /**

@@ -31,9 +31,9 @@ public class EpsmAttachmentController extends BaseController {
     @GetMapping(value = "/epsmAttachments")
     public Result epsmAttachmentList() {
         logger.info("epsmAttachmentList");
-        Long total =  epsmAttachmentService.getEpsmAttachmentRowCount(new Assist());
+        //Long total =  epsmAttachmentService.getEpsmAttachmentRowCount(new Assist());
         List<EpsmAttachment> epsmAttachmentList = epsmAttachmentService.selectEpsmAttachment(new Assist());
-        return ResponseUtil.success(epsmAttachmentList,total);
+        return ResponseUtil.success(epsmAttachmentList,(long)epsmAttachmentList.size());
     }
 
     /**
@@ -62,6 +62,29 @@ public class EpsmAttachmentController extends BaseController {
         EpsmAttachment epsmAttachment = epsmAttachmentService.selectEpsmAttachmentById(id);
         return ResponseUtil.success(epsmAttachment);
     }
+
+    /**
+     * 查询附件(分页使用)
+     * @param start
+     * @param end
+     * @return
+     */
+    @ApiOperation(value="获取附件(分页)", notes="根据url的start来获取从第start条开始，每次取end-start条")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "start", value = "第start条记录", required = true, dataType = "Integer ",paramType = "query"),
+            @ApiImplicitParam(name = "end", value = "第end条记录", required = true, dataType = "Integer",paramType = "query")
+    })
+    @GetMapping(value = "/epsmAttachments/from/{start}/to/{end}")
+    public Result selectEpsmAttachmentPage(@ApiParam(name = "start", required = true, value = "第start条记录")@PathVariable("start") Integer start,@ApiParam(name = "end", required = true, value = "第end条记录")@PathVariable("end") Integer end) {
+        logger.info("selectEpsmAttachmentPage");
+        Assist assist = new Assist();
+        assist.setStartRow(start);
+        assist.setRowSize(end-start);
+        List<EpsmAttachment> epsmAttachmentList = epsmAttachmentService.selectEpsmAttachment(assist);
+        return ResponseUtil.success(epsmAttachmentList,(long)epsmAttachmentList.size());
+    }
+
+
 
     /**
      * 更新一个附件

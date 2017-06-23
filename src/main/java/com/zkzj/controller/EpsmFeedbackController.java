@@ -31,9 +31,9 @@ public class EpsmFeedbackController extends BaseController {
     @GetMapping(value = "/epsmFeedbacks")
     public Result epsmFeedbackList() {
         logger.info("epsmFeedbackList");
-        Long total =  epsmFeedbackService.getEpsmFeedbackRowCount(new Assist());
+        //Long total =  epsmFeedbackService.getEpsmFeedbackRowCount(new Assist());
         List<EpsmFeedback> epsmFeedbackList = epsmFeedbackService.selectEpsmFeedback(new Assist());
-        return ResponseUtil.success(epsmFeedbackList,total);
+        return ResponseUtil.success(epsmFeedbackList,(long)epsmFeedbackList.size());
     }
 
     /**
@@ -59,8 +59,30 @@ public class EpsmFeedbackController extends BaseController {
     @GetMapping(value = "/epsmFeedbacks/{id}")
     public Result selectEpsmFeedbackById(@ApiParam(name = "id", required = true, value = "居民反馈Id")@PathVariable("id") String id) {
         logger.info("selectEpsmFeedbackById");
-        EpsmFeedback EpsmFeedback = epsmFeedbackService.selectEpsmFeedbackById(id);
-        return ResponseUtil.success(EpsmFeedback);
+        EpsmFeedback epsmFeedback = epsmFeedbackService.selectEpsmFeedbackById(id);
+        return ResponseUtil.success(epsmFeedback);
+    }
+
+
+    /**
+     * 查询居民反馈(分页使用)
+     * @param start
+     * @param end
+     * @return
+     */
+    @ApiOperation(value="获取居民反馈(分页)", notes="根据url的start来获取从第start条开始，每次取end-start条")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "start", value = "第start条记录", required = true, dataType = "Integer ",paramType = "query"),
+            @ApiImplicitParam(name = "end", value = "第end条记录", required = true, dataType = "Integer",paramType = "query")
+    })
+    @GetMapping(value = "/epsmFeedbacks/from/{start}/to/{end}")
+    public Result selectEpsmFeedbackPage(@ApiParam(name = "start", required = true, value = "第start条记录")@PathVariable("start") Integer start,@ApiParam(name = "end", required = true, value = "第end条记录")@PathVariable("end") Integer end) {
+        logger.info("selectEpsmFeedbackPage");
+        Assist assist = new Assist();
+        assist.setStartRow(start);
+        assist.setRowSize(end-start);
+        List<EpsmFeedback> epsmFeedbackList = epsmFeedbackService.selectEpsmFeedback(assist);
+        return ResponseUtil.success(epsmFeedbackList,(long)epsmFeedbackList.size());
     }
 
     /**

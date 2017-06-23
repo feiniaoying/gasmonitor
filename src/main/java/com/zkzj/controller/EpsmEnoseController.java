@@ -31,9 +31,9 @@ public class EpsmEnoseController extends BaseController {
     @GetMapping(value = "/epsmEnoses")
     public Result epsmEnoseList() {
         logger.info("epsmEnoseList");
-        Long total =  epsmEnoseService.getEpsmEnoseRowCount(new Assist());
-        List<EpsmEnose> EpsmEnoseList = epsmEnoseService.selectEpsmEnose(new Assist());
-        return ResponseUtil.success(EpsmEnoseList,total);
+        //Long total =  epsmEnoseService.getEpsmEnoseRowCount(new Assist());
+        List<EpsmEnose> epsmEnoseList = epsmEnoseService.selectEpsmEnose(new Assist());
+        return ResponseUtil.success(epsmEnoseList,(long)epsmEnoseList.size());
     }
 
     /**
@@ -59,8 +59,30 @@ public class EpsmEnoseController extends BaseController {
     @GetMapping(value = "/epsmEnoses/{id}")
     public Result selectEpsmEnoseById(@ApiParam(name = "id", required = true, value = "电子鼻信息Id")@PathVariable("id") String id) {
         logger.info("selectEpsmEnoseById");
-        EpsmEnose EpsmEnose = epsmEnoseService.selectEpsmEnoseById(id);
-        return ResponseUtil.success(EpsmEnose);
+        EpsmEnose epsmEnose = epsmEnoseService.selectEpsmEnoseById(id);
+        return ResponseUtil.success(epsmEnose);
+    }
+
+
+    /**
+     * 查询电子鼻信息(分页使用)
+     * @param start
+     * @param end
+     * @return
+     */
+    @ApiOperation(value="获取电子鼻信息(分页)", notes="根据url的start来获取从第start条开始，每次取end-start条")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "start", value = "第start条记录", required = true, dataType = "Integer ",paramType = "query"),
+            @ApiImplicitParam(name = "end", value = "第end条记录", required = true, dataType = "Integer",paramType = "query")
+    })
+    @GetMapping(value = "/epsmEnoses/from/{start}/to/{end}")
+    public Result selectEpsmEnosePage(@ApiParam(name = "start", required = true, value = "第start条记录")@PathVariable("start") Integer start,@ApiParam(name = "end", required = true, value = "第end条记录")@PathVariable("end") Integer end) {
+        logger.info("selectEpsmEnosePage");
+        Assist assist = new Assist();
+        assist.setStartRow(start);
+        assist.setRowSize(end-start);
+        List<EpsmEnose> epsmEnoseList = epsmEnoseService.selectEpsmEnose(assist);
+        return ResponseUtil.success(epsmEnoseList);
     }
 
     /**

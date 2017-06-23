@@ -31,9 +31,9 @@ public class EpsmCompanyController extends BaseController {
     @GetMapping(value = "/epsmCompanys")
     public Result epsmCompanyList() {
         logger.info("epsmCompanyList");
-        Long total =  epsmCompanyService.getEpsmCompanyRowCount(new Assist());
-        List<EpsmCompany> EpsmCompanyList = epsmCompanyService.selectEpsmCompany(new Assist());
-        return ResponseUtil.success(EpsmCompanyList,total);
+        //Long total =  epsmCompanyService.getEpsmCompanyRowCount(new Assist());
+        List<EpsmCompany> epsmCompanyList = epsmCompanyService.selectEpsmCompany(new Assist());
+        return ResponseUtil.success(epsmCompanyList,(long)epsmCompanyList.size());
     }
 
     /**
@@ -59,8 +59,30 @@ public class EpsmCompanyController extends BaseController {
     @GetMapping(value = "/epsmCompanys/{id}")
     public Result selectEpsmCompanyById(@ApiParam(name = "id", required = true, value = "工厂信息Id")@PathVariable("id") String id) {
         logger.info("selectEpsmCompanyById");
-        EpsmCompany EpsmCompany = epsmCompanyService.selectEpsmCompanyById(id);
-        return ResponseUtil.success(EpsmCompany);
+        EpsmCompany epsmCompany = epsmCompanyService.selectEpsmCompanyById(id);
+        return ResponseUtil.success(epsmCompany);
+    }
+
+
+    /**
+     * 查询工厂信息(分页使用)
+     * @param start
+     * @param end
+     * @return
+     */
+    @ApiOperation(value="获取工厂信息(分页)", notes="根据url的start来获取从第start条开始，每次取end-start条")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "start", value = "第start条记录", required = true, dataType = "Integer ",paramType = "query"),
+            @ApiImplicitParam(name = "end", value = "第end条记录", required = true, dataType = "Integer",paramType = "query")
+    })
+    @GetMapping(value = "/epsmCompanys/from/{start}/to/{end}")
+    public Result selectEpsmCompanyPage(@ApiParam(name = "start", required = true, value = "第start条记录")@PathVariable("start") Integer start,@ApiParam(name = "end", required = true, value = "第end条记录")@PathVariable("end") Integer end) {
+        logger.info("selectEpsmCompanyPage");
+        Assist assist = new Assist();
+        assist.setStartRow(start);
+        assist.setRowSize(end-start);
+        List<EpsmCompany> epsmCompanyList = epsmCompanyService.selectEpsmCompany(assist);
+        return ResponseUtil.success(epsmCompanyList,(long)epsmCompanyList.size());
     }
 
     /**
